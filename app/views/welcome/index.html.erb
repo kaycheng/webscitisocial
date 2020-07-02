@@ -1,3 +1,6 @@
 <h1 class="text-center">Hola</h1>
-<h2>test</h2>
-<i class="fab fa-500px"></i>
+<h2 data-controller="hello">test
+<%= link_to "#", class: "text-dark text-decoration-none", data: { action: "hello#addHello" } do %>
+  <i class="fab fa-500px" data-target="hello.sayHi"></i>
+<% end %>
+</h2>

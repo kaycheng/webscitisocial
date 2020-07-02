@@ -18,3 +18,5 @@ require("channels")
 import "../stylesheets/application"
 import "./bootstrap_custom"
 import "@fortawesome/fontawesome-free/css/all.min.css"
+
+import "controllers"
