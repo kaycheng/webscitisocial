@@ -1,0 +1,21 @@
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 330px;
+}
+
+.btn-outline-green {
+  color: rgb(0,191,165);
+  border-color: rgb(0,191,165);
+}
+
+.nav {
+  border-bottom: 1px solid #e6e6e6;
+}

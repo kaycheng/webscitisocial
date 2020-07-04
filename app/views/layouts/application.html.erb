@@ -4,6 +4,9 @@
     <title>WebCitisocial</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="turbolinks-cache-control" content="no-cache">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -11,6 +14,9 @@
   </head>
 
   <body>
+    <%= render 'shared/navbar' %>
+    <%= render 'shared/top_menu' %>
     <%= yield %>
+    <%= render 'shared/footer' %>
   </body>
 </html>
