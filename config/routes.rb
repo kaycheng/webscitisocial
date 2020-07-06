@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :products
 
   namespace :admin do
+    root "products#index"
     resources :products
+    resources :vendors, except: [:show]
   end
 end
