@@ -31,9 +31,12 @@ gem 'devise', '~> 4.7', '>= 4.7.2'
 gem 'figaro', '~> 1.2'
 gem 'omniauth-google-oauth2', '~> 0.8.0'
 
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec-rails', '~> 4.0', '>= 4.0.1'
+  gem 'hirb-unicode', '~> 0.0.5'
 end
 
 group :development do
