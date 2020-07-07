@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_032906) do
+ActiveRecord::Schema.define(version: 2020_07_07_041815) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -31,6 +31,21 @@ ActiveRecord::Schema.define(version: 2020_07_07_032906) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.integer "vendor_id", null: false
+    t.decimal "list_price"
+    t.decimal "sell_price"
+    t.boolean "on_sell", default: false
+    t.string "code"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["code"], name: "index_products_on_code", unique: true
+    t.index ["deleted_at"], name: "index_products_on_deleted_at"
+    t.index ["vendor_id"], name: "index_products_on_vendor_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -61,4 +76,5 @@ ActiveRecord::Schema.define(version: 2020_07_07_032906) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "products", "vendors"
 end
