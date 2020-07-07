@@ -1,26 +1,25 @@
 <section class="container">
   <%= form_with(model: [:admin, vendor]) do |f| %>
-  <div class="row">
-    <div class="col-6">
-      <div class="form-group">
-        <%= f.label :title %>
-        <%= f.text_field :title, class: "form-control" %>
-      </div>
-      <div class="form-check">
-        <%= f.check_box :online, class: "form-check-input" %>
-        <%= f.label :online, class: "form-check-label" %>
-      </div>
+  
+    <div class="form-group">
+      <%= f.label :title %>
+      <%= f.text_field :title, class: "form-control" %>
     </div>
-    <div class="col-6">
-      <div class="form-group">
-        <%= f.label :description %>
-        <%= f.text_area :description, class: "form-control" %>
-      </div>
-      <div class="form-group">
-        <%= f.submit (@vendor.title? ? 'Update' : 'Create'), class: "btn btn-info" %>
-      </div>
+  
+    <div class="form-group">
+      <%= f.label :description %>
+      <%= f.text_area :description, class: "form-control" %>
     </div>
-  </div>
+
+    <div class="form-check">
+      <%= f.check_box :online, class: "form-check-input" %>
+      <%= f.label :online, class: "form-check-label" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit (@vendor.title? ? 'Update' : 'Create'), class: "btn btn-info" %>
+    </div>
+    
   <% end %>
 </section>
   

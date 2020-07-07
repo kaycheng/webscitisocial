@@ -1,0 +1,36 @@
+<section class="container">
+  <%= form_with(model: [:admin, product]) do |f| %>
+  <div class="row">
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.label :name, "Product Name" %>
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :list_price, "List Price" %>
+        <%= f.number_field :list_price, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.label :vendor_id, "Vendor" %>
+        <%= f.collection_select :vendor_id, Vendor.available, :id, :title, { prompt: 'Select Vendor' }, { class: 'form-control' } %>
+      </div>
+      <div class="form-group">
+        <%= f.label :sell_price, "Selling Price" %>
+        <%= f.number_field :sell_price, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-check">
+        <%= f.check_box :on_sell, class: "form-check-input" %>
+        <%= f.label :on_sell, class: "form-check-label" %>
+      </div>
+      <div class="form-group">
+        <%= f.submit (@product.name? ? 'Edit Product' : 'Create New Product'), class: "btn btn-info" %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</section>
+  
