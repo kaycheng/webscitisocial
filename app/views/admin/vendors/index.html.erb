@@ -1,1 +1,32 @@
-<h1>All Vendors</h1>
+<h1>
+  All Vendors
+  <%= link_to "New Vendor", new_admin_vendor_path, class: "btn btn-info" %>
+</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Updated Time</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vendors.each do |vendor| %>
+      <tr>
+        <td><%= vendor.title %></td>
+        <td><%= simple_format(vendor.description).truncate(100) %></td>
+        <td><%= vendor.online %></td>
+        <td><%= vendor.updated_at.strftime('%F') %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_vendor_path(vendor), class: "btn btn-info btn-sm" %>
+          <%= link_to "Delete", admin_vendor_path(vendor),method: :delete,
+                                data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
