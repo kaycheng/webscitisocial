@@ -1,13 +1,31 @@
-<h1>GetBuy DashBoard</h1>
-<%= link_to "Create New Product", new_admin_product_path, class: "btn btn-info" %>
+<section class="container">
+  <h1>Product Lists</h1>
+  <%= link_to "Create New Product", new_admin_product_path, class: "btn btn-info" %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Vendor</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
 
-<% @products.each do |product| %>
-  <%= product.name %>
-  <%= product.vendor.title %>
-  <%= product.list_price %>
-  <%= product.sell_price %>
-  <%= product.on_sell %>
-  <%= link_to "edit", edit_admin_product_path(product), class: "btn btn-info" %>
-  <%= link_to "Delete", admin_product_path(product), method: :delete,
-                        data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
-<% end %>
+    <tbody>
+      <% @products.each do |product| %>
+      <tr>
+        <td><%= link_to "#{product.name} [ProductCode: #{product.code}]", edit_admin_product_path(product) %></td>
+        <td><%= product.vendor.title %></td>
+        <td><%= product.list_price %>/<%= product.sell_price %></td>
+        <td><%= product.on_sell %></td>
+        <td>
+          <%= link_to "edit", edit_admin_product_path(product), class: "btn btn-secondary btn-sm" %>
+          <%= link_to "Delete", admin_product_path(product), method: :delete,
+                                data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+        </td>
+      </tr>
+    </tbody>
+    <% end %>
+  </table>
+</section>
