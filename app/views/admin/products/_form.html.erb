@@ -31,11 +31,25 @@
         <%= f.rich_text_area :description %>
       </div>
 
+      <hr>
       <div class="form-group">
         <h3>Stock Items</h3>
-        <%= f.fields_for :skus do |sku_form| %>
-          <%= render 'sku_fields', form: sku_form %>
-        <% end %>
+        <div data-controller="product-form">
+          <template data-target="product-form.template">
+            <%= f.fields_for :skus, Sku.new, child_index: "NEW_RECORD" do |sku| %>
+              <%= render 'sku_fields', form: sku %>
+            <% end %>
+          </template>
+
+          <%= f.fields_for :skus do |sku_form| %>
+            <%= render 'sku_fields', form: sku_form %>
+          <% end %>
+        
+          <div data-target="product-form.link">
+            <%= link_to "Add New Spec", '#', data: { action: "product-form#addSku" },
+                                            class: "btn btn-secondary btn-sm" %>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
