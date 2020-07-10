@@ -1,10 +1,10 @@
-<section class="subscribe p-4 mb-2 bg-light text-dark">
+<section class="subscribe p-4 mb-2 bg-light text-dark" data-controller="subscribe">
   <h3 class="text-center">SIGN UP FOR GETBUY WEEKLY</h3>
   <div class="input-group mb-3">
-    <input type="text" class="form-control" style="font-family: FontAwesome;" placeholder='&#xf0e0 ENTER YOUR EMAIL' aria-label="Recipient's username"
+    <input type="text" class="form-control" data-target="subscribe.email" style="font-family: FontAwesome;" placeholder='&#xf0e0 ENTER YOUR EMAIL' aria-label="Recipient's username"
       aria-describedby="button-addon2">
     <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2">GET IT IN YOUR INBOX</button>
+      <button class="btn btn-outline-secondary" data-action="subscribe#add" type="button" id="button-addon2">GET IT IN YOUR INBOX</button>
     </div>
   </div>
 </section>
