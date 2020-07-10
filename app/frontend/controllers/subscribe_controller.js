@@ -13,9 +13,23 @@ export default class extends Controller {
     
     Rails.ajax({
       url: 'api/v1/subscribe',
+      data,
       type: 'POST',
       dataType: 'json',
-      data
+      success: (response) => {
+        switch (response.status) {
+          case 'ok':
+            alert('Subscribed successfully.');
+            this.emailTarget.value = '';
+            break;
+          case 'duplicated':
+            alert(`${response.email} already subscribed.`);
+            break; 
+        };
+      },
+      error: function(err) {
+        console.log(err);
+      }
     })
   }
 }
