@@ -1,1 +1,30 @@
-<h1>Show me categories</h1>
+<section class="category">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <h1>Categories</h1>
+      
+      <%= link_to "Create New Category", new_admin_category_path, class: "btn btn-secondary" %>
+      <div class="form mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Category Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @categories.each do |category| %>
+            <tr>
+              <td><%= link_to category.name, edit_admin_category_path(category) %></td>
+              <td>
+                <%= link_to "Delete", admin_category_path(category), method: :delete,
+                                        data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
