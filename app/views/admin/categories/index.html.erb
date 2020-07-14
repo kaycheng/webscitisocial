@@ -2,29 +2,37 @@
   <div class="row justify-content-center">
     <div class="col-10">
       <h1>Categories</h1>
-      
-      <%= link_to "Create New Category", new_admin_category_path, class: "btn btn-secondary" %>
-      <div class="form mt-3">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Category Name</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @categories.each do |category| %>
-            <tr>
-              <td><%= link_to category.name, edit_admin_category_path(category) %></td>
-              <td>
-                <%= link_to "Delete", admin_category_path(category), method: :delete,
-                                        data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
-              </td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
+
+      <div class="button">
+        <%= link_to "Create New Category", new_admin_category_path, class: "btn btn-secondary" %>
       </div>
+      
+      <div class="mt-3 mb-3 notified-message">
+        <p class="text-middle mb-0"><strong>&nbsp; Notice: </strong> The category's position can be changed by dragging.</p>
+      </div>
+      
+      
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Category Name</th>
+            <th></th>
+          </tr>
+        </thead>
+        
+        <tbody class="sortable-items">
+          <% @categories.each do |category| %>
+          <tr class="item" data-item="<%= dom_id(category) %>">
+            <td><i class="fas fa-grip-vertical"></i> <%= link_to category.name, edit_admin_category_path(category) %></td>
+            <td>
+              <%= link_to "Delete", admin_category_path(category), method: :delete,
+                                      data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      
     </div>
   </div>
 </section>
