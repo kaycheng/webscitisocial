@@ -1,5 +1,5 @@
 class Admin::CategoriesController < Admin::BaseController
-  before_action :find_category, only: [:edit, :update, :destroy]
+  before_action :find_category, only: [:edit, :update, :destroy, :sort]
 
   def index
     @categories = Category.order(position: :asc)
@@ -30,6 +30,11 @@ class Admin::CategoriesController < Admin::BaseController
   def destroy
     @category.destroy
     redirect_to admin_categories_path, notice: "Category was deleted successfully."
+  end
+
+  def sort
+    @category.insert_at(params[:to].to_i + 1)
+    render json: { status: 'ok' }
   end
 
   private
