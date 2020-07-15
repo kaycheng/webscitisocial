@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   root "welcome#index"
 
   resources :products
+  resources :categories, only: [:show]
 
   namespace :admin do
     root "products#index"
