@@ -1,0 +1,21 @@
+<section class="product_list section">
+  <section class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <% products.each do |product| %>
+            <div class="col-4 mt-3">
+              <div class="card" style="width: 18rem;">
+                <%= image_tag product.cover_image, class: "card-img-top" if product.cover_image.attached? %>
+                <div class="card-body">
+                  <h5 class="card-title"><%= product.vendor.title %></h5>
+                  <p class="card-text"><%= product.name %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
