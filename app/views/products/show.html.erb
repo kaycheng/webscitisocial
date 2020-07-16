@@ -1,0 +1,30 @@
+<section class="product-content container">
+  <div class="row">
+    <div class="col-7">
+      <%= image_tag @product.cover_image, class: "d-block w-100" if @product.cover_image.attached? %>
+      <div class="content">
+        <h5>Product Introduce</h5>
+        <p><%= @product.description %></p>
+      </div>
+    </div>
+    <div class="col-5">
+      <h4 class="text-muted"><%= @product.vendor.title %></h4>
+      <h2><%= @product.name %></h2>
+      <p><strong>List Price: </strong><%= @product.list_price %></p>
+      <p><strong>Sell Price: </strong><%= @product.sell_price %></p>
+      
+      <% if @product.skus.any? %>
+        <div class="row">
+          <div class="col-2">
+            <p class="align-middle"><strong>Spec: </strong></p>
+          </div>
+          <div class="col-10">
+            <select class="custom-select custom-select-md">
+              <%= options_for_select(@product.skus.map { |p| [p.spec, p.id] }) %>
+            </select>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

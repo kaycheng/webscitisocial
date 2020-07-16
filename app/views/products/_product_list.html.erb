@@ -1,9 +1,9 @@
-<section class="product_list section">
-  <section class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="row">
-          <% products.each do |product| %>
+<section class="product_list container">
+  <div class="row">
+    <div class="col-12">
+      <div class="row justify-content-around">
+        <% products.each do |product| %>
+          <%= link_to product_path(product), class: "text-dark text-decoration-none" do %>
             <div class="col-4 mt-3">
               <div class="card" style="width: 18rem;">
                 <%= image_tag product.cover_image, class: "card-img-top" if product.cover_image.attached? %>
@@ -14,8 +14,8 @@
               </div>
             </div>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </div>
-  </section>
+  </div>
 </section>
