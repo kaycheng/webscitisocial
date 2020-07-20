@@ -30,6 +30,17 @@ RSpec.describe Cart, type: :model do
       expect(cart.items.first.product).to be_a Product
     end
 
+    it "We can count the whole cart's price" do
+      cart = Cart.new
+      p1 = create(:product, sell_price: 10)
+      p2 = create(:product, sell_price: 5)
+
+      3.times { cart.add_item(p1.id) }
+      2.times { cart.add_item(p2.id) }
+
+      expect(cart.total_price).to eq 40
+    end
+
   end
 
   describe "Further Function" do
