@@ -18,6 +18,16 @@ RSpec.describe Cart, type: :model do
       expect(cart.items.count).to be 2
       expect(cart.items.first.quantity).to be 3
     end
+
+    it "We add product in cart and when we take it out, the product is the same" do
+      cart = Cart.new
+      v1 = Vendor.create(title: 'v1')
+      p1 = Product.create(name: 'kk', list_price: 10, sell_price: 5, vendor: v1)
+
+      cart.add_item(p1.id)
+      
+      expect(cart.items.first.product).to be_a Product
+    end
   end
 
   describe "Further Function" do
