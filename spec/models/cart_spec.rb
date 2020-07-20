@@ -21,8 +21,9 @@ RSpec.describe Cart, type: :model do
 
     it "We add product in cart and when we take it out, the product is the same" do
       cart = Cart.new
-      v1 = Vendor.create(title: 'v1')
-      p1 = Product.create(name: 'kk', list_price: 10, sell_price: 5, vendor: v1)
+      # v1 = Vendor.create(title: 'v1')
+      # p1 = Product.create(name: 'kk', list_price: 10, sell_price: 5, vendor: v1)
+      p1 = FactoryBot.create(:product)
 
       cart.add_item(p1.id)
       
