@@ -52,15 +52,23 @@ RSpec.describe Cart, type: :model do
       3.times { cart.add_item(p1.id) }
       2.times { cart.add_item(p2.id) }
 
-      cart_hash = {
+      expect(cart.serialize).to eq cart_hash
+    end
+
+    it "The content which is stored in sessions can be transformat to cart content" do
+      cart = Cart.from_hash(cart_hash)
+
+      expect(cart.items.first.quantity).to be 3
+    end
+
+    private
+    def cart_hash
+      {
         "items" => [
           {"product_id" => 1, "quantity" => 3},
           {"product_id" => 2, "quantity" => 2}
         ] 
       }
-      
-      expect(cart.serialize).to eq cart_hash
-
     end
   end
 end
