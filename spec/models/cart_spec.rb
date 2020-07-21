@@ -1,17 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Cart, type: :model do
+  let(:cart) { Cart.new }
+
   describe "Basic Function" do
     it "We can add items to cart, then cart won't be empty" do
     # AAA = Arrange, Act, Assert
-    cart = Cart.new
     cart.add_item(2)
-    expect(cart.empty?).to be false
+    # expect(cart.empty?).to be false
+    expect(cart).not_to be_empty
     end
 
     it "Add same items to cart, then quantity will be changed" do
-      cart = Cart.new
-
       3.times { cart.add_item(1) }
       2.times { cart.add_item(2) }
 
@@ -20,7 +20,6 @@ RSpec.describe Cart, type: :model do
     end
 
     it "We add product in cart and when we take it out, the product is the same" do
-      cart = Cart.new
       # v1 = Vendor.create(title: 'v1')
       # p1 = Product.create(name: 'kk', list_price: 10, sell_price: 5, vendor: v1)
       p1 = create(:product)
@@ -31,7 +30,6 @@ RSpec.describe Cart, type: :model do
     end
 
     it "We can count the whole cart's price" do
-      cart = Cart.new
       p1 = create(:product, sell_price: 10)
       p2 = create(:product, sell_price: 5)
 
@@ -45,7 +43,6 @@ RSpec.describe Cart, type: :model do
 
   describe "Further Function" do
     it "The content of cart can be transformated to Hash and restore on Sessions" do
-      cart = Cart.new
       p1 = create(:product)
       p2 = create(:product)
 

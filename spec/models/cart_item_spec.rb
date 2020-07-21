@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe CartItem, type: :model do
+  let(:cart) { Cart.new }
+
   it "It has total price of every cart item" do
-    cart = Cart.new
     p1 = create(:product, sell_price: 10)
     p2 = create(:product, sell_price: 5)
     
