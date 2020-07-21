@@ -5,6 +5,13 @@ class Cart
     @items = []
   end
 
+  def serialize
+    items = @items.map { |item| {"product_id" => item.product_id, 
+                                 "quantity" => item.quantity } }
+    
+    { "items" => items }
+  end
+
   def add_item(product_id)
     found_item = items.find { |item| item.product_id == product_id }
 
@@ -29,4 +36,6 @@ class Cart
     #total
     @items.reduce(0) { |sum, item| sum + item.total_price }
   end
+
+  
 end

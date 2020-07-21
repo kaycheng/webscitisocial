@@ -44,5 +44,23 @@ RSpec.describe Cart, type: :model do
   end
 
   describe "Further Function" do
+    it "The content of cart can be transformated to Hash and restore on Sessions" do
+      cart = Cart.new
+      p1 = create(:product)
+      p2 = create(:product)
+
+      3.times { cart.add_item(p1.id) }
+      2.times { cart.add_item(p2.id) }
+
+      cart_hash = {
+        "items" => [
+          {"product_id" => 1, "quantity" => 3},
+          {"product_id" => 2, "quantity" => 2}
+        ] 
+      }
+      
+      expect(cart.serialize).to eq cart_hash
+
+    end
   end
 end
