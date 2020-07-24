@@ -7,24 +7,56 @@
         <p><%= @product.description %></p>
       </div>
     </div>
-    <div class="col-5">
-      <h4 class="text-muted"><%= @product.vendor.title %></h4>
-      <h2><%= @product.name %></h2>
-      <p><strong>List Price: </strong><%= @product.list_price %></p>
-      <p><strong>Sell Price: </strong><%= @product.sell_price %></p>
+
+    <div class="col-5" data-controller="product" data-product-id="<%= @product.code %>">
+      <div class="form-group">
+        <div class="col-12">
+          <h5 class="text-muted"><%= @product.vendor.title %></h5>
+          <h2><%= @product.name %></h2>
+          <p class="line-through"><strong>List Price: </strong><%= @product.list_price %></p>
+          <p><strong>Sell Price: </strong><%= @product.sell_price %></p>
+        </div>
+      </div>
       
       <% if @product.skus.any? %>
-        <div class="row">
-          <div class="col-2">
-            <p class="align-middle"><strong>Spec: </strong></p>
+        <div class="form-row">
+          <div class="col-3 my-auto">
+            <label><strong>Spec: </strong></label>
           </div>
-          <div class="col-10">
+          <div class="col-9 my-auto">
             <select class="custom-select custom-select-md">
               <%= options_for_select(@product.skus.map { |p| [p.spec, p.id] }) %>
             </select>
           </div>
         </div>
       <% end %>
+
+      <div class="form-row mt-3">
+        <div class="col-3 my-auto">
+          <label><strong>Quantity: </strong></label>
+        </div>
+        <div class="col-9 my-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <%= link_to "#", class: "input-group-text", data: {action: "product#quantityMinus"} do %>
+                -
+              <% end %>
+            </div>
+            <input type="text" class="form-control text-center" value="1" data-target="product.quantity">
+            <div class="input-group-append">
+              <%= link_to "#", class: "input-group-text", data: {action: "product#quantityPlus"} do %>
+                +
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form mt-3">
+        <div class="col-12">
+          <%= link_to "Add To Cart", "#", class: "btn btn-green btn-block", data: {action: "product#o"} %>
+        </div>
+      </div>
     </div>
   </div>
 </section>
