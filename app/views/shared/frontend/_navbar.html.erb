@@ -17,10 +17,12 @@
     </form>
     
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
+      <li class="nav-item" data-controller="cart">
         <%= link_to "#", class: "nav-link" do %>
           <i class="fas fa-shopping-cart"></i>
-          (<%= current_cart.items.count %>)
+          <span data-target="cart.count" data-action="addToCart@document->cart#updateCart">
+            (<%= current_cart.items.count %>)
+          </span>
         <% end %>
       </li>
       <% if user_signed_in? %>

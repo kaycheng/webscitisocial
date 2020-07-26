@@ -12,7 +12,7 @@ export default class extends Controller {
     let sku = this.skuTarget.value;
 
     if (quantity > 0) {
-      this.addToCartButtonTarget.classList.add('spinner-grow', 'text-white')
+      this.addToCartButtonTarget.classList.add('spinner-grow', 'text-white');
       this.addToCartButtonTarget.innerHTML = '';
 
       let data = new FormData();
@@ -25,10 +25,19 @@ export default class extends Controller {
         data,
         type: "POST",
         success: resp => {
-          console.log(resp);
+          if (resp.status === 'ok') {
+            let item_count = resp.items || 0;
+            // post event
+            let evt = new CustomEvent('addToCart', {'detail': {item_count} });
+            document.dispatchEvent(evt);
+          }
         },
         error: err => {
           console.log(err);
+        },
+        complete: () => {
+          this.addToCartButtonTarget.classList.remove('spinner-grow', 'text-white');
+          this.addToCartButtonTarget.innerHTML = 'Add To Cart';
         }
       });
     }
