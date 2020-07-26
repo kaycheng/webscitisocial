@@ -24,7 +24,7 @@
             <label><strong>Spec: </strong></label>
           </div>
           <div class="col-9 my-auto">
-            <select class="custom-select custom-select-md">
+            <select class="custom-select custom-select-md" data-target="product.sku">
               <%= options_for_select(@product.skus.map { |p| [p.spec, p.id] }) %>
             </select>
           </div>
@@ -38,13 +38,13 @@
         <div class="col-9 my-auto">
           <div class="input-group">
             <div class="input-group-prepend">
-              <%= link_to "#", class: "input-group-text", data: {action: "product#quantityMinus"} do %>
+              <%= link_to "#", class: "input-group-text text-decoration-none", data: {action: "product#quantityMinus"} do %>
                 -
               <% end %>
             </div>
             <input type="text" class="form-control text-center" value="1" data-target="product.quantity">
             <div class="input-group-append">
-              <%= link_to "#", class: "input-group-text", data: {action: "product#quantityPlus"} do %>
+              <%= link_to "#", class: "input-group-text text-decoration-none", data: {action: "product#quantityPlus"} do %>
                 +
               <% end %>
             </div>
@@ -53,8 +53,11 @@
       </div>
       
       <div class="form mt-3">
-        <div class="col-12">
-          <%= link_to "Add To Cart", "#", class: "btn btn-green btn-block", data: {action: "product#o"} %>
+        <div class="row text-center">
+          <div class="col-12">
+            <a href="#" class="btn btn-green btn-block" data-target="product.addToCartButton"
+              data-action="product#addToCart">Add To Cart</a>
+          </div>
         </div>
       </div>
     </div>
