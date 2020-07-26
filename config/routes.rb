@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   resources :products
   resources :categories, only: [:show]
-  resource :cart, only: [:show, :delete]
+  resource :cart, only: [:show, :destroy]
 
   namespace :admin do
     resources :products, except: [:show]

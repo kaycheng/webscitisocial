@@ -1,29 +1,45 @@
 <section class="container">
-  <h1>cart</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Mount</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% current_cart.items.each do |item| %>
-      <tr>
-        <td><%= item.product.name %></td>
-        <td><%= item.product.sell_price %></td>
-        <td><%= item.quantity %></td>
-        <td><%= item.total_price %></td>
-      </tr>
+  <h1>Cart</h1>
+  <% unless current_cart.empty? %>
+    <div>
+      <%= link_to cart_path, class: "text-decoration-none", method: :delete, data: {confirm: "Are you sure?"} do %>
+        <i class="far fa-trash-alt"></i>
+        <span>Delete Items</span>
       <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='3'><b>Total Price</b></td>
-        <td ><%= current_cart.total_price %></td>
-      </tr>
-    </tfoot>
-  </table>
+    </div>
+  <% end %>
+  
+  <% if current_cart.empty? %>
+    <p>Please choose something</p>
+    <%= link_to "Choose Item", root_path, class: "btn btn-info" %>
+  <% else %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Mount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% current_cart.items.each do |item| %>
+        <tr>
+          <td><%= item.product.name %></td>
+          <td><%= item.product.sell_price %></td>
+          <td><%= item.quantity %></td>
+          <td><%= item.total_price %></td>
+        </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan='3'><b>Total Price</b></td>
+          <td ><%= current_cart.total_price %></td>
+        </tr>
+      </tfoot>
+    </table>
+    <%= link_to "Choose Item", root_path, class: "btn btn-info" %>
+    <%= link_to "Pay", "#", class: "btn btn-danger" %>
+    <% end %>
 </section>
