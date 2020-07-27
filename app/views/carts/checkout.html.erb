@@ -3,4 +3,28 @@
 
   <%= render "cart_list" %>
   
+  <h3 class="mt-5">Recipient Information</h3>
+  <%= form_with model: @order do |f| %>
+    <div class="form-row">
+      <div class="col">
+        <%= f.label :recipient %>
+        <%= f.text_field :recipient, class: "form-control" %>
+      </div>
+      <div class="col">
+        <%= f.label :tel %>
+        <%= f.text_field :tel, class: "form-control" %>
+      </div>
+      <div class="col">
+        <%= f.label :address %>
+        <%= f.text_field :address, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :note %>
+      <%= f.text_area :note, rows: 5, class: "form-control" %>
+    </div>
+    <div class="form-action">
+      <%= f.submit "Use Line-Pay", class: "btn btn-info", data: { confirm: "Are you sure?" } %>
+    </div>
+    <% end %>
 </section>
