@@ -34,6 +34,7 @@ gem 'paranoia', '~> 2.4', '>= 2.4.2'
 gem 'friendly_id', '~> 5.3'
 gem 'acts_as_list', '~> 1.0', '>= 1.0.1'
 gem 'faraday', '~> 1.0', '>= 1.0.1'
+gem 'aasm', '~> 5.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

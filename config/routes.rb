@@ -14,7 +14,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :orders, except: [:new, :edit, :update, :destroy]
+  resources :orders, except: [:new, :edit, :update, :destroy] do
+    collection do
+      get :confirm    # orders/confirm
+    end
+  end
 
   namespace :admin do
     resources :products, except: [:show]
