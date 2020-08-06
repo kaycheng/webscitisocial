@@ -293,6 +293,7 @@ DEPENDENCIES
   devise (~> 4.7, >= 4.7.2)
   factory_bot_rails (~> 6.1)
   faker (~> 2.13)
+  faraday (~> 1.0, >= 1.0.1)
   figaro (~> 1.2)
   friendly_id (~> 5.3)
   hirb-unicode (~> 0.0.5)
