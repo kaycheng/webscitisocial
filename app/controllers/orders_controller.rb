@@ -22,9 +22,15 @@ class OrdersController < ApplicationController
         }.to_json
       end
 
-      redirect_to root_path, notice: 'ok'
-    else
-      render 'carts/checkout'
+      result = JSON.parse(resp.body)
+
+      if result["returnCode"] == "0000"
+        payment_url = result["info"]["paymentUrl"]["web"]
+        redirect_to payment_url
+      else
+        flash[:notice] = "There are some errors occurred."
+        render 'carts/checkout'
+      end
     end
   end
 
