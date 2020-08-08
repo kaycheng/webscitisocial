@@ -9,11 +9,11 @@ class OrdersController < ApplicationController
     end
 
     if @order.save
-      resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/request") do |rep|
-        rep.headers['Content-Type'] = 'application/json'
-        rep.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-        rep.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-        rep.body = {
+      resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/request") do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
+        req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
+        req.body = {
           productName: "testProduct",
           amount: current_cart.total_price.to_i,
           currency: "TWD",
@@ -35,13 +35,12 @@ class OrdersController < ApplicationController
   end
 
   def confirm
-    id = params[:transactionId]
     
-    resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/#{params[:transactionId]}/confirm") do |rep|
-      rep.headers['Content-Type'] = 'application/json'
-      rep.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-      rep.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-      rep.body = {
+    resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/#{params[:transactionId]}/confirm") do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
+      req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
+      req.body = {
         amount: current_cart.total_price.to_i,
         currency: "TWD",
       }.to_json
@@ -50,9 +49,16 @@ class OrdersController < ApplicationController
     result = JSON.parse(resp.body)
 
     if result['returnCode'] == "0000"
+      order_id = result["info"]["orderId"]
+      transaction_id = result["info"]["transactionId"]
+
       # 1. Change payment status
+      order = current_user.orders.find_by(num: order_id)
+      order.pay!(transaction_id: transaction_id)
+
       # 2. Clear current_cart to empty
-      # 3. redirect_to root_path
+      session[:cart_9527] = nil
+      redirect_to root_path, notice: "Payment completed."
     else
       flash[:notice] = "There are some errors occurred."
       redirect_to root_path
