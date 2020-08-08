@@ -15,8 +15,12 @@ Rails.application.routes.draw do
   end
 
   resources :orders, except: [:new, :edit, :update, :destroy] do
+    member do
+      delete :cancel     # orders/id/cancel
+    end
+    
     collection do
-      get :confirm    # orders/confirm
+      get :confirm       # orders/confirm
     end
   end
 

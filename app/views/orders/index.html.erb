@@ -20,7 +20,8 @@
               <td><%= order.state %></td>
               <td>
                 <%= link_to "Pay", "#", class: "btn btn-success btn-sm" if order.may_pay? %>
-                <%= link_to "Cancel", "#", class: "btn btn-danger btn-sm" if order.may_cancel? %>
+                <%= link_to "Cancel", cancel_order_path(order), method: :delete, data: { confirm: "Are you sure?\nWe will refund, if the payment completed."},
+                                      class: "btn btn-danger btn-sm" if order.may_cancel? %>
               </td>
             </tr>
           <% end %>
