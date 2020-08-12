@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
+  before_action :find_order, only: [:cancel, :pay, :pay_confirm]
 
   def index
     @orders = current_user.orders.order(id: :desc)
@@ -13,24 +14,17 @@ class OrdersController < ApplicationController
     end
 
     if @order.save
-      resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/request") do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-        req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-        req.body = {
-          productName: "testProduct",
-          amount: current_cart.total_price.to_i,
-          currency: "TWD",
-          confirmUrl: "http://localhost:3000/orders/confirm",
-          orderId: @order.num
-        }.to_json
-      end
+      linepay = LinepayService.new('/payments/request')
+      linepay.perform({
+        productName: "testProduct",
+        amount: current_cart.total_price.to_i,
+        currency: "TWD",
+        confirmUrl: "http://localhost:3000/orders/confirm",
+        orderId: @order.num
+      })
 
-      result = JSON.parse(resp.body)
-
-      if result["returnCode"] == "0000"
-        payment_url = result["info"]["paymentUrl"]["web"]
-        redirect_to payment_url
+      if linepay.success?
+        redirect_to linepay.payment_url
       else
         flash[:notice] = "There are some errors occurred."
         render 'carts/checkout'
@@ -39,49 +33,33 @@ class OrdersController < ApplicationController
   end
 
   def confirm
+    linepay = LinepayService.new("/payments/#{params["transactionId"]}/confirm")
+    linepay.perform({
+      amount: current_cart.total_price.to_i,
+      currency: "TWD"
+    })
     
-    resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/#{params[:transactionId]}/confirm") do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-      req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-      req.body = {
-        amount: current_cart.total_price.to_i,
-        currency: "TWD"
-      }.to_json
-    end
-
-    result = JSON.parse(resp.body)
-
-    if result['returnCode'] == "0000"
-      order_id = result["info"]["orderId"]
-      transaction_id = result["info"]["transactionId"]
-
+    if linepay.success?
       # 1. Change payment status
-      order = current_user.orders.find_by(num: order_id)
-      order.pay!(transaction_id: transaction_id)
+      @order = current_user.orders.find_by(num: linepay.order[:order_id])
+      @order.pay!(transaction_id: linepay.order[:transaction_id])
 
       # 2. Clear current_cart to empty
       session[:cart_9527] = nil
-      redirect_to root_path, notice: "Payment completed."
+      redirect_to orders_path, notice: "Payment completed."
     else
       flash[:notice] = "There are some errors occurred."
-      redirect_to root_path
+      redirect_to orders_path
     end
   end
 
   def cancel
-    @order = current_user.orders.find(params[:id])
 
     if @order.paid?
-      resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/#{@order.transaction_id}/refund") do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-        req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-      end
+      linepay = LinepayService.new("/payments/#{@order.transaction_id}/refund")
+      linepay.perform(refundAmount: @order.total_price.to_i)
 
-      result = JSON.parse(resp.body)
-
-      if result["returnCode"] == "0000"
+      if linepay.success?
         @order.cancel!
         redirect_to orders_path, notice: "Order #{@order.num} is cancelled and refunded."
       else
@@ -94,27 +72,19 @@ class OrdersController < ApplicationController
   end
 
   def pay
-    @order = current_user.orders.find(params[:id])
     
     if @order.save
-      resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/request") do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-        req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-        req.body = {
-          productName: "testProduct",
-          amount: @order.total_price.to_i,
-          currency: "TWD",
-          confirmUrl: "http://localhost:3000/orders/#{@order.id}/pay_confirm",
-          orderId: @order.num
-        }.to_json
-      end
-
-      result = JSON.parse(resp.body)
-
-      if result["returnCode"] == "0000"
-        payment_url = result["info"]["paymentUrl"]["web"]
-        redirect_to payment_url
+      linepay = LinepayService.new("/payments/request")
+      linepay.perform({
+        productName: "testProduct",
+        amount: @order.total_price.to_i,
+        currency: "TWD",
+        confirmUrl: "http://localhost:3000/orders/#{@order.id}/pay_confirm",
+        orderId: @order.num
+      })
+      
+      if linepay.success?
+        redirect_to linepay.payment_url
       else
         redirect_to orders_path, notice: "There are some errors occurred."
       end
@@ -122,25 +92,15 @@ class OrdersController < ApplicationController
   end
 
   def pay_confirm
-    @order = current_user.orders.find(params[:id])
-
-    resp = Faraday.post("#{ENV['LINE_PAY_ENDPOINT']}/v2/payments/#{params[:transactionId]}/confirm") do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['X-LINE-ChannelId'] = ENV['LINE_PAY_ID']
-      req.headers['X-LINE-ChannelSecret'] = ENV['LINE_PAY_SECRET']
-      req.body = {
-        amount: @order.total_price.to_i,
-        currency: "TWD"
-      }.to_json
-    end
-
-    result = JSON.parse(resp.body)
-
-    if result['returnCode'] == "0000"
-      transaction_id = result["info"]["transactionId"]
+    linepay = LinepayService.new("/payments/#{params[:transactionId]}/confirm")
+    linepay.perform({
+      amount: @order.total_price.to_i,
+      currency: "TWD"
+    })
+    if linepay.success?
 
       # 1. Change payment status
-      @order.pay!(transaction_id: transaction_id)
+      @order.pay!(transaction_id: linepay.order[:transaction_id])
 
       # 2. Clear current_cart to empty
       session[:cart_9527] = nil
@@ -154,5 +114,9 @@ class OrdersController < ApplicationController
   private
   def order_params
     params.require(:order).permit(:recipient, :tel, :address, :note)
+  end
+
+  def find_order
+    @order = current_user.orders.find(params[:id])
   end
 end
