@@ -1,24 +1,11 @@
-# README
+# WebCitisocial
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a website which is created for practicing. And [Citiesocial](https://www.citiesocial.com/) is the original model for being referenced. 
 
-Things you may want to cover:
+**Built with**
 
-* Ruby version
+* [Ruby on Rails 6.0.3](http://rubyonrails.org/)
 
-* System dependencies
+* [Ruby 2.6](https://www.ruby-lang.org/en/)
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* [Stimulus.js](https://stimulusjs.org/)
