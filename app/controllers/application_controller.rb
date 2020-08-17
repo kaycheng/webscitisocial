@@ -21,4 +21,10 @@ class ApplicationController < ActionController::Base
   def current_cart
     @cart9527 ||= Cart.from_hash(session[:cart_9527])
   end
+
+  def authenticate_admin
+    unless current_user.admin?
+      redirect_to root_path, notice: "Not allowed!"
+    end
+  end
 end

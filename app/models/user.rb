@@ -10,6 +10,13 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :orders
 
+  enum role: {
+    user: 0,
+    admin: 1,
+    vendor: 2
+  }
+
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
